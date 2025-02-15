@@ -362,6 +362,11 @@ endif
 PRODUCT_PRODUCT_PROPERTIES += \
     debug.graphics.game_default_frame_rate.disabled=true
 
+# Disable touch video heatmap to reduce latency, motion jitter, and CPU usage
+# on supported devices with Deep Press input classifier HALs and models
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.input.video_enabled=false
+
 ifeq ($(WITH_GMS),true)
 WITH_GMS_VARIANT ?= pico
 -include vendor/gapps/arm64/arm64-vendor.mk
