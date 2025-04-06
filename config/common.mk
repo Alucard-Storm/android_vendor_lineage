@@ -132,6 +132,10 @@ TARGET_SCREEN_HEIGHT ?= 1920
 PRODUCT_PACKAGES += \
     build-manifest
 
+# GameSpace
+PRODUCT_PACKAGES += \
+    GameSpace
+
 # Lineage packages
 TARGET_INCLUDES_LOS_PREBUILTS ?= false
 ifeq ($(TARGET_INCLUDES_LOS_PREBUILTS),true)
