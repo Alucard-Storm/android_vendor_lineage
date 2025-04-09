@@ -1,45 +1,56 @@
-PRODUCT_VERSION_MAJOR = 22
-PRODUCT_VERSION_MINOR = 2
+HORIZON_REVISION := v5.1
+HORIZON_CODENAME := Aquila
+HORIZON_BUILD_DATE := $(shell date +"%d%m%Y")
 
-ifeq ($(LINEAGE_VERSION_APPEND_TIME_OF_DAY),true)
-    LINEAGE_BUILD_DATE := $(shell date -u +%Y%m%d_%H%M%S)
+MAINTAINER_LIST = $(shell cat horizon-maintainers/maintainers.list)
+DEVICE_LIST = $(shell cat horizon-maintainers/devices.list)
+
+ifeq ($(filter $(LINEAGE_BUILD), $(DEVICE_LIST)), $(LINEAGE_BUILD))
+   ifeq ($(filter $(HORIZON_MAINTAINER), $(MAINTAINER_LIST)), $(HORIZON_MAINTAINER))
+      HORIZON_BUILD_TYPE := OFFICIAL
+  else
+     # the builder is overriding official flag on purpose
+     ifeq ($(HORIZON_BUILD_TYPE), OFFICIAL)
+       $(error **********************************************************)
+       $(error *     A violation has been detected, aborting build      *)
+       $(error **********************************************************)
+       HORIZON_BUILD_TYPE := UNOFFICIAL
+     else
+       $(warning **********************************************************************)
+       $(warning *   There is already an official maintainer for $(LINEAGE_BUILD)    *)
+       $(warning *              Setting build type to UNOFFICIAL                      *)
+       $(warning *    Please contact current official maintainer before distributing  *)
+       $(warning *              the current build to the community.                   *)
+       $(warning **********************************************************************)
+       HORIZON_BUILD_TYPE := UNOFFICIAL
+     endif
+  endif
 else
-    LINEAGE_BUILD_DATE := $(shell date -u +%Y%m%d)
+   ifeq ($(HORIZON_BUILD_TYPE), OFFICIAL)
+     $(error **********************************************************)
+     $(error *     A violation has been detected, aborting build      *)
+     $(error **********************************************************)
+   endif
+  HORIZON_BUILD_TYPE := UNOFFICIAL
 endif
 
-# Set LINEAGE_BUILDTYPE from the env RELEASE_TYPE, for jenkins compat
-
-ifndef LINEAGE_BUILDTYPE
-    ifdef RELEASE_TYPE
-        # Starting with "LINEAGE_" is optional
-        RELEASE_TYPE := $(shell echo $(RELEASE_TYPE) | sed -e 's|^LINEAGE_||g')
-        LINEAGE_BUILDTYPE := $(RELEASE_TYPE)
-    endif
+ifeq ($(WITH_GMS),true)
+HORIZON_BUILD_VARIANT := GAPPS
+else
+HORIZON_BUILD_VARIANT := VANILLA
 endif
 
-# Filter out random types, so it'll reset to UNOFFICIAL
-ifeq ($(filter RELEASE NIGHTLY SNAPSHOT EXPERIMENTAL,$(LINEAGE_BUILDTYPE)),)
-    LINEAGE_BUILDTYPE := UNOFFICIAL
-    LINEAGE_EXTRAVERSION :=
+ifdef HORIZON_MAINTAINER
+PRODUCT_PRODUCT_PROPERTIES += \
+   ro.horizon.maintainer=$(HORIZON_MAINTAINER)
 endif
 
-ifeq ($(LINEAGE_BUILDTYPE), UNOFFICIAL)
-    ifneq ($(TARGET_UNOFFICIAL_BUILD_ID),)
-        LINEAGE_EXTRAVERSION := -$(TARGET_UNOFFICIAL_BUILD_ID)
-    endif
-endif
+HORIZON_VERSION := HorizonDroid-$(HORIZON_REVISION)-$(HORIZON_CODENAME)-$(HORIZON_BUILD_VARIANT)-$(LINEAGE_BUILD)-$(HORIZON_BUILD_TYPE)-$(HORIZON_BUILD_DATE)
 
-LINEAGE_VERSION_SUFFIX := $(LINEAGE_BUILD_DATE)-$(LINEAGE_BUILDTYPE)$(LINEAGE_EXTRAVERSION)-$(LINEAGE_BUILD)
-
-# Internal version
-LINEAGE_VERSION := $(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(LINEAGE_VERSION_SUFFIX)
-
-# Display version
-LINEAGE_DISPLAY_VERSION := $(PRODUCT_VERSION_MAJOR)-$(LINEAGE_VERSION_SUFFIX)
-
-# LineageOS version properties
+# HorizonDroid version properties
 PRODUCT_SYSTEM_PROPERTIES += \
-    ro.lineage.version=$(LINEAGE_VERSION) \
-    ro.lineage.display.version=$(LINEAGE_DISPLAY_VERSION) \
-    ro.lineage.build.version=$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR) \
-    ro.lineage.releasetype=$(LINEAGE_BUILDTYPE)
+    ro.horizon.version=$(HORIZON_VERSION) \
+    ro.horizon.revision=$(HORIZON_REVISION) \
+    ro.horizon.codename=$(HORIZON_CODENAME) \
+    ro.horizon.device=$(LINEAGE_BUILD) \
+    ro.horizon.releasetype=$(HORIZON_BUILD_TYPE)
