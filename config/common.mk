@@ -335,6 +335,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
     debug.graphics.game_default_frame_rate.disabled=true
 
 ifeq ($(WITH_GMS),true)
+WITH_GMS_VARIANT ?= pico
 -include vendor/gapps/arm64/arm64-vendor.mk
 endif
 
