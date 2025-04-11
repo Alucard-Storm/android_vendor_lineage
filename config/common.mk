@@ -126,8 +126,6 @@ endif
 # Bootanimation
 TARGET_SCREEN_WIDTH ?= 1080
 TARGET_SCREEN_HEIGHT ?= 1920
-PRODUCT_PACKAGES += \
-    bootanimation.zip
 
 # Build Manifest
 PRODUCT_PACKAGES += \
@@ -341,6 +339,7 @@ ifeq ($(WITH_GMS),true)
 endif
 
 include vendor/lineage/config/version.mk
+include vendor/lineage/bootanimation/bootanimation.mk
 
 -include vendor/lineage-priv/keys/keys.mk
 
