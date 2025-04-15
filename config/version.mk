@@ -1,5 +1,5 @@
-HORIZON_REVISION := v5.1
-HORIZON_CODENAME := Aquila
+HORIZON_REVISION := v5.2
+HORIZON_CODENAME := Supernova
 HORIZON_BUILD_DATE := $(shell date +"%d%m%Y")
 
 MAINTAINER_LIST = $(shell cat horizon-maintainers/maintainers.list)
