@@ -172,7 +172,8 @@ PRODUCT_PACKAGES += \
     vim
 
 PRODUCT_PACKAGES += \
-    nano_recovery
+    nano_recovery \
+    OmniJaws 
 
 PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
     system/bin/curl \
