@@ -54,3 +54,6 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.horizon.codename=$(HORIZON_CODENAME) \
     ro.horizon.device=$(LINEAGE_BUILD) \
     ro.horizon.releasetype=$(HORIZON_BUILD_TYPE)
+
+# Signing keys
+-include vendor/horizon-priv/keys/keys.mk
