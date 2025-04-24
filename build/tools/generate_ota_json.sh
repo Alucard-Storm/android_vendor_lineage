@@ -1,17 +1,20 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <TARGET_DEVICE> <PRODUCT_OUT> <FILENAME>"
+if [ "$#" -ne 4 ]; then
+    echo "Usage: $0 <TARGET_DEVICE> <PRODUCT_OUT> <FILENAME> <MAINTAINER_NAME>"
     exit 1
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEVICE_LIST="$SCRIPT_DIR/device_name.list"
 TARGET_DEVICE=$1
 PRODUCT_OUT=$2
-HORIZON_ZIP=$3
-FILENAME="$HORIZON_ZIP"
+LINEAGE_ZIP=$3
+MT_NAME=$4
+FILENAME="$LINEAGE_ZIP"
 
-if [[ "$FILENAME" =~ HorizonDroid-.*-(OFFICIAL|UNOFFICIAL)-[0-9]+\.zip ]]; then
-    ROMTYPE="${BASH_REMATCH[1]}"
+if [[ "$FILENAME" =~ HorizonDroid-v[0-9\.]+-.*-(OFFICIAL|UNOFFICIAL)-[0-9]+\.zip ]]; then
+    BUILDTYPE="${BASH_REMATCH[1]}"
 else
     echo "Error: Unable to extract ROM type from filename: $FILENAME"
     exit 1
@@ -39,26 +42,41 @@ if [ ! -f "$FILE_PATH" ]; then
 fi
 
 SIZE=$(stat -c%s "$FILE_PATH")
-ID=$(md5sum "$FILE_PATH" | awk '{print $1}')
+SUM=$(md5sum "$FILE_PATH" | awk '{print $1}')
 DATETIME=$(date +%s)
-
-JSON_DIR="$PRODUCT_OUT/$FLAVOR"
-if [ ! -d "$JSON_DIR" ]; then
-    mkdir -p "$JSON_DIR"
+if [ "$BUILDTYPE" != "OFFICIAL" ]; then
+    MAINTAINER=""
+else
+    MAINTAINER=$MT_NAME
 fi
-JSON_FILE="$JSON_DIR/${TARGET_DEVICE}.json"
+DEVICE_NAME=$(grep "^${TARGET_DEVICE}=" $DEVICE_LIST | cut -d= -f2- | tr -d '"')
+
+if [ -z "$DEVICE_NAME" ] || [ "$BUILDTYPE" != "OFFICIAL" ]; then
+    DEVICE_NAME=""
+fi
+
+JSON_OUT="$PRODUCT_OUT/$FLAVOR"
+if [ ! -d "$JSON_OUT" ]; then
+    mkdir -p "$JSON_OUT"
+fi
+JSON_FILE="$JSON_OUT/${TARGET_DEVICE}.json"
 
 cat > "$JSON_FILE" <<EOF
 {
     "response": [
         {
+            "device": "$DEVICE_NAME",
+            "codename": "$TARGET_DEVICE",
+            "maintainer": "$MAINTAINER",
             "datetime": $DATETIME,
             "filename": "$FILENAME",
-            "id": "$ID",
-            "romtype": "$ROMTYPE",
+            "md5": "$SUM",
+            "buildtype": "$BUILDTYPE",
             "size": $SIZE,
-            "url": "",
-            "version": "$VERSION"
+            "download": "https://www.pling.com/p/2259442/",
+            "version": "$VERSION",
+            "support": "",
+            "changelogs": ""
         }
     ]
 }
