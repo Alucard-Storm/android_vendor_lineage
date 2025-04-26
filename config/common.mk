@@ -163,6 +163,9 @@ PRODUCT_COPY_FILES += \
 # CertifiedProps
 $(call inherit-product, vendor/certification/config.mk)
 
+PRODUCT_PACKAGES += \
+    ColumbusService 
+
 # Config
 PRODUCT_PACKAGES += \
     SimpleDeviceConfig \
