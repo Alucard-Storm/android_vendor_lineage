@@ -166,6 +166,12 @@ $(call inherit-product, vendor/certification/config.mk)
 PRODUCT_PACKAGES += \
     ColumbusService 
 
+
+ifeq ($(TARGET_INCLUDE_MATLOG),true)
+PRODUCT_PACKAGES += \
+    MatLog
+endif
+
 # Config
 PRODUCT_PACKAGES += \
     SimpleDeviceConfig \
