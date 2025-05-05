@@ -163,6 +163,15 @@ PRODUCT_COPY_FILES += \
 # CertifiedProps
 $(call inherit-product, vendor/certification/config.mk)
 
+PRODUCT_PACKAGES += \
+    ColumbusService 
+
+
+ifeq ($(TARGET_INCLUDE_MATLOG),true)
+PRODUCT_PACKAGES += \
+    MatLog
+endif
+
 # Config
 PRODUCT_PACKAGES += \
     SimpleDeviceConfig \
@@ -335,6 +344,16 @@ PRODUCT_PACKAGES += \
     FaceUnlock
 PRODUCT_SYSTEM_EXT_PROPERTIES += \
     ro.face.sense_service=true
+
+# Disable async MTE on a few processes
+PRODUCT_SYSTEM_EXT_PROPERTIES += \
+    persist.arm64.memtag.app.com.android.se=off \
+    persist.arm64.memtag.app.com.android.bluetooth=off
+    persist.arm64.memtag.app.com.google.android.bluetooth=off \
+    persist.arm64.memtag.app.com.android.nfc=off \
+    persist.arm64.memtag.process.system_server=off
+
+# Product Copy
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.biometrics.face.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/android.hardware.biometrics.face.xml
 endif
@@ -342,6 +361,11 @@ endif
 # Disable default frame rate limit for games
 PRODUCT_PRODUCT_PROPERTIES += \
     debug.graphics.game_default_frame_rate.disabled=true
+
+# Disable touch video heatmap to reduce latency, motion jitter, and CPU usage
+# on supported devices with Deep Press input classifier HALs and models
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.input.video_enabled=false
 
 ifeq ($(WITH_GMS),true)
 WITH_GMS_VARIANT ?= pico

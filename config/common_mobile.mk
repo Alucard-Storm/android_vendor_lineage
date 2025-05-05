@@ -49,29 +49,37 @@ endif
 # Customizations
 PRODUCT_PACKAGES += \
     IconPackCircularAndroidOverlay \
-    IconPackCircularLauncherOverlay \
-    IconPackCircularSettingsOverlay \
     IconPackCircularSystemUIOverlay \
-    IconPackFilledAndroidOverlay \
-    IconPackFilledLauncherOverlay \
-    IconPackFilledSettingsOverlay \
-    IconPackFilledSystemUIOverlay \
-    IconPackKaiAndroidOverlay \
-    IconPackKaiLauncherOverlay \
-    IconPackKaiSettingsOverlay \
-    IconPackKaiSystemUIOverlay \
-    IconPackRoundedAndroidOverlay \
-    IconPackRoundedLauncherOverlay \
-    IconPackRoundedSettingsOverlay \
-    IconPackRoundedSystemUIOverlay \
-    IconPackSamAndroidOverlay \
-    IconPackSamLauncherOverlay \
-    IconPackSamSettingsOverlay \
-    IconPackSamSystemUIOverlay \
     IconPackVictorAndroidOverlay \
-    IconPackVictorLauncherOverlay \
-    IconPackVictorSettingsOverlay \
     IconPackVictorSystemUIOverlay \
+    IconPackSamAndroidOverlay \
+    IconPackSamSystemUIOverlay \
+    IconPackKaiAndroidOverlay \
+    IconPackKaiSystemUIOverlay \
+    IconPackFilledAndroidOverlay \
+    IconPackFilledSystemUIOverlay \
+    IconPackPUIAndroidOverlay \
+    IconPackPUISystemUIOverlay \
+    IconPackRoundedAndroidOverlay \
+    IconPackRoundedSystemUIOverlay \
+    IconPackNostalgicAndroidOverlay \
+    IconPackNostalgicSystemUIOverlay \
+    IconPackOOSAndroidOverlay \
+    IconPackOOSSystemUIOverlay \
+    IconPackOutlineAndroidOverlay \
+    IconPackOutlineSystemUIOverlay \
+    IconPackAcherusAndroidOverlay \
+    IconPackAcherusSystemUIOverlay \
+    IconPackAuroraAndroidOverlay \
+    IconPackAuroraSystemUIOverlay \
+    IconPackGradiconAndroidOverlay \
+    IconPackGradiconSystemUIOverlay \
+    IconPackLornAndroidOverlay \
+    IconPackLornSystemUIOverlay \
+    IconPackPlumpySystemUIOverlay \
+    IconPackPlumpyAndroidOverlay \
+    IconPackXperiaAndroidOverlay \
+    IconPackXperiaSystemUIOverlay \
     IconShapePebbleOverlay \
     IconShapeRoundedRectOverlay \
     IconShapeSquareOverlay \
